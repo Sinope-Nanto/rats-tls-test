@@ -1,3 +1,3 @@
 [submodule "src/external/libcbor-source"]
 	path = src/external/libcbor-source
-	url = git@github.com:PJK/libcbor.git
+	url = git@github.com:Sinope-Nanto/libcbor.git
