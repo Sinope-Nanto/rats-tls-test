@@ -1,3 +1,4 @@
+mkdir lib
 cp /usr/local/lib/rats-tls/lib* lib/
 mkdir build && cd build
 cmake ..
