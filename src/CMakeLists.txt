@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.16)
 # Set include directory
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -fPIC -Werror=implicit-function-declaration")
@@ -95,6 +96,7 @@ add_library(${RTLS_LIB} SHARED ${SOURCES})
 add_dependencies(${RTLS_LIB} libcbor)
 target_link_libraries(${RTLS_LIB} ${RATS_TLS_LDFLAGS} ${LIBCBOR_LIB_FILES})
 set_target_properties(${RTLS_LIB} PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
+
 
 
 # Install lib
