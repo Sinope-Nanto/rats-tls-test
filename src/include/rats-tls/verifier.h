@@ -72,6 +72,11 @@ struct enclave_verifier_ctx {
 			const char name[ENCLAVE_VERIFIER_TYPE_NAME_SIZE];
 			uint8_t cert_type;
 		} tdx;
+	
+		struct {
+			const char name[ENCLAVE_VERIFIER_TYPE_NAME_SIZE];
+			uint8_t cert_type;
+		} demo;	
 	} config;
 };
 

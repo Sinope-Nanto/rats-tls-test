@@ -1,1 +1,2 @@
 add_subdirectory(nullverifier)
+add_subdirectory(demoverifier)
