@@ -42,6 +42,9 @@ if(SGX)
     list(APPEND INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/edl
                              ${CMAKE_BINARY_DIR}/src/sgx/trust
                              )
+    message("SGX here")
+else()
+    message(WARNING "NO SGX found in host mode")
 endif()
 
 # Add third party and instance directory
