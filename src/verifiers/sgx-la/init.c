@@ -1,5 +1,5 @@
-/* Copyright (c) 2022 Intel Corporation
- * Copyright (c) 2020-2022 Alibaba Cloud
+/* Copyright (c) 2021 Intel Corporation
+ * Copyright (c) 2020-2021 Alibaba Cloud
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -9,7 +9,7 @@
 
 static unsigned int dummy_private;
 
-enclave_verifier_err_t sev_snp_verifier_init(enclave_verifier_ctx_t *ctx, rats_tls_cert_algo_t algo)
+enclave_verifier_err_t sgx_la_verifier_init(enclave_verifier_ctx_t *ctx, rats_tls_cert_algo_t algo)
 {
 	RTLS_DEBUG("ctx %p, algo %d\n", ctx, algo);
 
