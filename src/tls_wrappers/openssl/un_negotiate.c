@@ -124,7 +124,7 @@ int verify_certificate(int preverify_ok, X509_STORE_CTX *ctx)
 * This code allows you to use command "openssl x509 -in /tmp/cert.der -inform der -text -noout"
 * to dump the content of TLS certificate with evidence extension.
 */
-#if 0
+
 	#ifndef SGX
 	X509 *crt = X509_STORE_CTX_get_current_cert(ctx);
 	if (!crt) {
@@ -150,7 +150,7 @@ int verify_certificate(int preverify_ok, X509_STORE_CTX *ctx)
 
 	free(der_buf);
 	#endif
-#endif
+
 
 	X509_STORE *cert_store = X509_STORE_CTX_get0_store(ctx);
 	int *ex_data = per_thread_getspecific();
