@@ -37,11 +37,26 @@ set(INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
                  /usr/include
                  )
 
+
+if(SGX)
+    list(APPEND INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/edl
+                             ${CMAKE_BINARY_DIR}/src/sgx/trust
+                             )
+endif()
+
 # Add third party and instance directory
 add_subdirectory(attesters)
 add_subdirectory(verifiers)
 
+if(SGX)
+    add_subdirectory(sgx)
+endif()
+
 # Add third party library required by crypto_wrappers and tls_wrappers
+
+if(SGX)
+    list(APPEND INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/external/sgx-ssl/intel-sgx-ssl/src/intel-sgx-ssl/Linux/package/include)
+endif()
 
 add_subdirectory(crypto_wrappers)
 add_subdirectory(tls_wrappers)
@@ -88,14 +103,46 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/verifiers/internal/rtls_enclave_verifier_select.c
     )
 
+if(SGX)
+    list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/sgx/trust/rtls_syscalls.c
+                        ${CMAKE_CURRENT_SOURCE_DIR}/sgx/trust/sgx_ecdsa_ecalls.c
+                        ${CMAKE_CURRENT_SOURCE_DIR}/sgx/trust/sgx_dummy.c
+                        )
+endif()
+
+# Static library dependencies
+if(SGX)
+    set(DEPEND_TRUSTED_LIBS rtls_edl_t
+                            intel-sgx-ssl
+                            crypto_wrapper_nullcrypto
+                            crypto_wrapper_openssl
+                            tls_wrapper_nulltls
+                            tls_wrapper_openssl
+                            attester_nullattester
+                            attester_demoattester
+                            attester_sgx_ecdsa
+                            attester_sgx_la
+                            verifier_nullverifier
+                            verifier_demoverifier
+                            verifier_sgx_ecdsa_qve
+                            verifier_sgx_la
+                            libcbor
+                            )
+endif()
+
 # Generate librar
 
 set(RTLS_LIB rats_tls)
 
-add_library(${RTLS_LIB} SHARED ${SOURCES})
-add_dependencies(${RTLS_LIB} libcbor)
-target_link_libraries(${RTLS_LIB} ${RATS_TLS_LDFLAGS} ${LIBCBOR_LIB_FILES})
-set_target_properties(${RTLS_LIB} PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
+if(SGX)
+    add_trusted_library(${RTLS_LIB} SRCS ${SOURCES} TRUSTED_LIBS ${DEPEND_TRUSTED_LIBS})
+    add_dependencies(${RTLS_LIB} ${DEPEND_TRUSTED_LIBS})
+else()
+    add_library(${RTLS_LIB} SHARED ${SOURCES})
+    add_dependencies(${RTLS_LIB} libcbor)
+    target_link_libraries(${RTLS_LIB} ${RATS_TLS_LDFLAGS} ${LIBCBOR_LIB_FILES})
+    set_target_properties(${RTLS_LIB} PROPERTIES VERSION ${VERSION} SOVERSION ${VERSION_MAJOR})
+endif()
 
 
 
